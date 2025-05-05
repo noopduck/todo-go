@@ -122,5 +122,8 @@ func main() {
 	http.HandleFunc("/addtask", app.addTaskHandler)
 	http.HandleFunc("/listtasks", app.listTasks)
 
-	http.ListenAndServe(":8080", nil)
+	var port = "8080"
+	if http.ListenAndServe(":"+port, nil) != nil {
+		log.Println("Prolly already listening on port:", port)
+	}
 }

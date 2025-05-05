@@ -1,4 +1,4 @@
-module todo
+module todo-go
 
 go 1.24.2
 
