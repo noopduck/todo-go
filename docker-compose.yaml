@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  todo-go:
+    image: localhost/todo-go:latest
+    environment:
+      AUTH_SERVER: ${AUTH_SERVER}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      CALLBACK: ${CALLBACK}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - keycloak
+    networks:
+      - todo-go_default
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    command: start-dev
+    restart: always
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - todo-go_default
+
+volumes:
+  keycloak_data:
+
+networks:
+  todo-go_default: {}
