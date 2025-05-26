@@ -1,33 +1,31 @@
 FROM golang:1.24.2 AS builder
 
-# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Copy go mod and sum files
 COPY go.mod go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
-# Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-# Build the Go app
-RUN go build -o main .
+# Sørg for at binæren bygges for Linux
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 
-# Start a new stage from scratch
-FROM golang:1.24.2
+# Start ny, minimal base
+FROM debian:bookworm-slim
 
-# Set the Current Working Directory inside the container
+# Installer bare det mest nødvendige (f.eks. for TLS/certs)
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy the Pre-built binary file from the previous stage
+# Kopier over fra build-stage
 COPY --from=builder /app/main .
-
+COPY --from=builder /app/entrypoint.sh .
 COPY --from=builder /app/todo.db .
 
-# Expose port 8080 to the outside world
+# Sørg for at begge er kjørbare
+RUN chmod +x ./entrypoint.sh ./main
+
 EXPOSE 8080
 
-# Command to run the executable
-CMD ["./main"]
+ENTRYPOINT ["./entrypoint.sh"]
