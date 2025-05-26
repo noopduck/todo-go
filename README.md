@@ -2,8 +2,13 @@
 
 This is a simple Todo List application built with Go and SQLite. It allows users to add tasks and list all tasks stored in a SQLite database.
 
+The project is being setup to use OAuth2 with Keycloak as the authentication source. It serves as an example on how OAuth2 can be implemented with Keycloak using Go.
+
 ## Features
 
+- Login
+- Logout
+- Callback
 - Add a new task
 - List all tasks
 
@@ -36,7 +41,7 @@ This is a simple Todo List application built with Go and SQLite. It allows users
 
 ## Environment Variables
 
-Create a `.env` file in the root of your project with the following keys. Do not include the actual secrets, just use example values:
+Create a `.env` file in the root of your project with the following keys. Do not include the actual secrets when committing your code to git:
 
 ```
 HOST=example_host
