@@ -13,27 +13,27 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - keycloak
+    #    depends_on:
+    #      - keycloak
     networks:
       - todo-go_default
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    ports:
-      - "8081:8080"
-    command: start-dev
-    restart: always
-    volumes:
-      - keycloak_data:/opt/keycloak/data
-    networks:
-      - todo-go_default
-
-volumes:
-  keycloak_data:
-
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:latest
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#    ports:
+#      - "8081:8080"
+#    command: start-dev
+#    restart: always
+#    volumes:
+#      - keycloak_data:/opt/keycloak/data
+#    networks:
+#      - todo-go_default
+#
+#volumes:
+#  keycloak_data:
+#
 networks:
   todo-go_default: {}
