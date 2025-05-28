@@ -21,9 +21,7 @@ type App struct {
 
 // Setup db connection
 func setupDb() *sql.DB {
-
 	//os.Remove("./todo.db")
-
 	var err error
 
 	db, err := sql.Open("sqlite3", "./todo.db")
@@ -31,17 +29,19 @@ func setupDb() *sql.DB {
 		log.Fatal(err)
 	}
 
-	return db
 	// TODO: this stuff should be tested for create if exists..
-	//stmt := `
-	//create table todo (id integer not null primary key AUTOINCREMENT, task text);
-	//`
+	stmt := `
+	create table if not exists todo (id integer not null primary key AUTOINCREMENT, task text);
+	`
 
-	//_, err = db.Exec(stmt)
-	//if err != nil {
-	//	log.Printf("%q: %s\n", err, stmt)
-	//	return
-	//}
+	_, err = db.Exec(stmt)
+
+	if err != nil {
+		log.Printf("%q: %s\n", err, stmt)
+		return nil
+	}
+
+	return db
 }
 
 // Adding the task into the global list
